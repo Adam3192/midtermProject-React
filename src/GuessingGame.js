@@ -1,28 +1,39 @@
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { useState } from 'react';
-import Stack from 'react-bootstrap/Stack';
 
 function GuessingGame() {
   const [luckyNumber, setLuckyNumber] = useState(Math.floor((Math.random() * 100) + 1));
   const [currentGuess, setCurrentGuess] = useState();
   const [totalGuesses, setTotalGuesses] = useState(0);
+  const [newGuess, setNewGuess] = useState();
   const [hint, setHint] = useState({
-    highGuess: "Your guess is too high!",
-    lowGuess: "Your guess is too low!",
-    correctGuess: "You guessed the Lucky Number!"
+    highGuess: "",
+    lowGuess: "",
+    correctGuess: ""
   });
   
   function resetGame() {
     setLuckyNumber(Math.floor((Math.random() * 100) + 1))
     setTotalGuesses(0)
-    
+    setCurrentGuess('');
+    setNewGuess('')
+    setHint({
+      highGuess: "",
+      lowGuess: "",
+      correctGuess: ""
+    })
   }
-
+  
   function handleGuess(event) {
-    setTotalGuesses(totalGuesses + 1)
-    setCurrentGuess(event.target.value);
+    setNewGuess(currentGuess);
     event.preventDefault()
+    setTotalGuesses(totalGuesses + 1)
+    setHint({
+      highGuess: "Your guess is too high!",
+      lowGuess: "Your guess is too low!",
+      correctGuess: "Congrats you guessed it!"
+    })
   }
 
   function handleChange(event) {
@@ -35,7 +46,7 @@ function GuessingGame() {
     <p>{`You have made ${totalGuesses} guesses`}</p>
       <Form onSubmit={handleGuess}>
       <Form.Group className="mb-3" >
-        <Form.Control type="text" value={currentGuess} onChange={handleChange} />
+        <Form.Control style={{ width: '30vw', margin: 'auto' }} type="text" value={currentGuess} onChange={handleChange} />
       </Form.Group>
       <Button type="submit">Guess</Button> 
         <br />
@@ -43,9 +54,10 @@ function GuessingGame() {
       <Button onClick={resetGame}>Reset</Button>
       </Form>
       <div>
-        { currentGuess < luckyNumber ? <p>{hint.lowGuess}</p> : ''}
-        { currentGuess > luckyNumber ? <p>{hint.highGuess}</p> : ''}
-        { currentGuess == luckyNumber ? <p>{hint.correctGuess}</p> : ''}
+        { totalGuesses == 0 ? <p>Start Guessing</p> : ''}
+        { newGuess < luckyNumber ? <p>{hint.lowGuess}</p> : ''}
+        { newGuess > luckyNumber ? <p>{hint.highGuess}</p> : ''}
+        { newGuess == luckyNumber ? <p>{hint.correctGuess}</p> : ''}
       </div>
   </>
   );

@@ -2,7 +2,9 @@ import GuessingGame from './GuessingGame';
 
 function App() {
   return (
-    <GuessingGame />
+    <div style={{ textAlign: 'center' }}>
+      <GuessingGame />
+    </div>
   );
 }
 
